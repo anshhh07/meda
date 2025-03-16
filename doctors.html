@@ -1,0 +1,96 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Doctors List - MedAI</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 text-gray-900">
+    <header class="bg-blue-600 text-white p-5 shadow-md text-center">
+        <h1 class="text-3xl font-bold">MedAI - Our Doctors</h1>
+    </header>
+    
+    <main class="p-10">
+        <h2 class="text-2xl font-semibold text-center mb-6">Available Doctors</h2>
+        
+        <div id="doctors-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- Doctors will be loaded here dynamically -->
+        </div>
+    </main>
+
+    <footer class="text-center p-5 bg-gray-800 text-white mt-10">
+        <p>&copy; 2025 MedAI. All rights reserved.</p>
+    </footer>
+
+    <div id="popup" class="fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center hidden">
+        <div class="bg-white p-6 rounded shadow-md text-center w-96">
+            <h3 class="text-xl font-bold mb-2">Appointment Confirmed</h3>
+            <p id="popup-content" class="text-gray-700"></p>
+            <button onclick="closePopup()" class="mt-4 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">OK</button>
+        </div>
+    </div>
+
+    <script>
+        const doctors = [
+            {
+                name: "Dr. John Doe",
+                profession: "Cardiologist",
+                experience: "10 Years",
+                contact: "+1 234 567 890",
+                available_slots: ["10:00 AM", "2:00 PM", "4:30 PM"],
+                image: "https://randomuser.me/api/portraits/men/32.jpg"
+            },
+            {
+                name: "Dr. Sarah Smith",
+                profession: "Dermatologist",
+                experience: "8 Years",
+                contact: "+1 987 654 321",
+                available_slots: ["11:00 AM", "3:00 PM"],
+                image: "https://randomuser.me/api/portraits/women/44.jpg"
+            },
+            {
+                name: "Dr. Michael Brown",
+                profession: "Neurologist",
+                experience: "12 Years",
+                contact: "+1 345 678 901",
+                available_slots: ["9:30 AM", "1:00 PM"],
+                image: "https://randomuser.me/api/portraits/men/47.jpg"
+            }
+        ];
+
+        function loadDoctors() {
+            const container = document.getElementById("doctors-list");
+            doctors.forEach((doctor, index) => {
+                const docElement = document.createElement("div");
+                docElement.classList = "bg-white p-4 rounded shadow-md text-center";
+                docElement.innerHTML = `
+                    <img src="${doctor.image}" class="w-32 h-32 mx-auto rounded-full mb-4" alt="Doctor Photo">
+                    <h3 class="text-xl font-bold">${doctor.name}</h3>
+                    <p class="text-gray-600">${doctor.profession}</p>
+                    <p class="text-gray-500 text-sm">Experience: ${doctor.experience}</p>
+                    <p class="text-gray-500 text-sm">Contact: ${doctor.contact}</p>
+                    <p class="font-semibold mt-2">Free Slots:</p>
+                    <select id="slot-${index}" class="w-full p-2 border rounded mb-4">
+                        ${doctor.available_slots.map(slot => `<option>${slot}</option>`).join('')}
+                    </select>
+                    <button onclick="bookAppointment(${index})" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 w-full">Book Appointment</button>
+                `;
+                container.appendChild(docElement);
+            });
+        }
+
+        function bookAppointment(index) {
+            const doctor = doctors[index];
+            const selectedSlot = document.getElementById(`slot-${index}`).value;
+            document.getElementById("popup-content").innerText = `You have booked an appointment with ${doctor.name} (${doctor.profession}) at ${selectedSlot}.`;
+            document.getElementById("popup").classList.remove("hidden");
+        }
+
+        function closePopup() {
+            document.getElementById("popup").classList.add("hidden");
+        }
+
+        document.addEventListener("DOMContentLoaded", loadDoctors);
+    </script>
+</body>
+</html>

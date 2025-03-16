@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile - MedAI</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 text-gray-900 flex justify-center items-center min-h-screen">
+
+    <div class="bg-white p-6 rounded-lg shadow-lg text-center w-96">
+        <!-- Profile Picture -->
+        <div class="relative w-32 h-32 mx-auto">
+            <img id="profileImage" src="https://via.placeholder.com/150" alt="Profile Picture" class="w-32 h-32 rounded-full border-4 border-blue-500">
+            <input type="file" id="uploadImage" class="absolute inset-0 opacity-0 w-full h-full cursor-pointer">
+        </div>
+
+        <!-- User Name -->
+        <h2 id="userName" class="text-2xl font-semibold mt-4">John Doe</h2>
+
+        <!-- User Info -->
+        <div class="mt-4 text-gray-600">
+            <p><strong>Email:</strong> <span id="userEmail">johndoe@example.com</span></p>
+            <p><strong>Phone:</strong> <span id="userPhone">+1 234 567 890</span></p>
+            <p><strong>Age:</strong> <span id="userAge">30</span></p>
+        </div>
+
+        <!-- Logout Button -->
+        <button onclick="logout()" class="mt-5 bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600">
+            Logout
+        </button>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const user = JSON.parse(localStorage.getItem("user"));
+
+            if (user) {
+                document.getElementById("userName").innerText = user.name;
+                document.getElementById("userEmail").innerText = user.email;
+                document.getElementById("userPhone").innerText = user.phone || "Not Provided";
+                document.getElementById("userAge").innerText = user.age || "Not Provided";
+            } else {
+                alert("Please login first!");
+                window.location.href = "login.html";
+            }
+
+            // Profile picture upload
+            document.getElementById("uploadImage").addEventListener("change", function(event) {
+                const file = event.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        document.getElementById("profileImage").src = e.target.result;
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+        });
+
+        function logout() {
+            localStorage.removeItem("user");
+            window.location.href = "login.html";
+        }
+    </script>
+
+</body>
+</html>

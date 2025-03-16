@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MedAI Chatbot</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 text-gray-900">
+    <header class="bg-blue-600 text-white p-5 shadow-md text-center">
+        <h1 class="text-3xl font-bold">MedAI Chatbot</h1>
+    </header>
+
+    <main class="p-10 text-center">
+        <h2 class="text-xl font-semibold mb-2">Ask about doctors and available slots</h2>
+        <div class="max-w-lg mx-auto bg-white p-6 rounded shadow-md">
+            <div id="chatbox" class="h-64 overflow-y-auto p-2 border border-gray-300 rounded mb-4"></div>
+            <input type="text" id="userInput" class="w-full p-2 border rounded" placeholder="Type your message...">
+            <button onclick="sendMessage()" class="bg-blue-600 text-white px-4 py-2 rounded mt-2 w-full">Send</button>
+        </div>
+    </main>
+
+    <script>
+        async function sendMessage() {
+            const input = document.getElementById("userInput").value;
+            document.getElementById("userInput").value = "";
+
+            const chatbox = document.getElementById("chatbox");
+            chatbox.innerHTML += `<p><strong>You:</strong> ${input}</p>`;
+
+            const response = await fetch("http://127.0.0.1:5000/chat", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ message: input })
+            });
+
+            const data = await response.json();
+            chatbox.innerHTML += `<p><strong>Bot:</strong> ${data.response}</p>`;
+        }
+    </script>
+</body>
+</html>
